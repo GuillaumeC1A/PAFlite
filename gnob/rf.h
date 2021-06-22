@@ -21,19 +21,17 @@ private:
     std::string subdev;
     std::string antenna_mode;
     std::string ref;
-    uhd::usrp::multi_usrp::sptr usrp;
-
+    
 public:
     rf(
-            double sample_rate,
-            double center_frequency,
-            double gain,
-            double bandwidth,
-            std::string subdev,
-            std::string antenna_mode,
-            std::string ref,
-            std::string device_args);
+            double sample_rate, double center_frequency,
+                                double gain,
+                                double bandwidth);
+    
+    uhd::usrp::multi_usrp::sptr usrp;
+
 
 };
+
 
 #endif

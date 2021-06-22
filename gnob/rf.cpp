@@ -10,24 +10,55 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <mutex>
 #include <unistd.h>
+#include <iostream>
+#include <complex>
+#include <vector>
+#include <uhd.h>
+#include <uhd/exception.hpp>
+#include <uhd/transport/udp_simple.hpp>
+#include <uhd/types/tune_request.hpp>
+#include <uhd/types/time_spec.hpp>
+#include <uhd/types/device_addr.hpp>
+#include <uhd/usrp/multi_usrp.hpp>
+#include <uhd/types/stream_cmd.hpp>
+#include <uhd/utils/safe_main.hpp>
+#include <uhd/utils/thread.hpp>
+#include <boost/format.hpp>
+#include <boost/program_options.hpp>
+#include <chrono>
+#include <complex>
+#include <iostream>
+#include <thread>
+#include "rf.h"
+#include <string>
 
 
-rf::rf(double sample_rate, double center_frequency, double gain, double bandwidth,
-               std::string subdev, std::string antenna_mode, std::string ref, std::string device_args) {
 
-    //uhd::set_thread_priority_safe();
+rf::rf(double sample_rate, double center_frequency,
+                                double gain,
+                                double bandwidth) {
+
+    
+
+    std::string device_serial = "3167783";
+
+
+    std::string device_args("serial=" + device_serial );
+    device_args +=", master_clock_rate=30.72e6, recv_frame_size=7976, ";
+    device_args+="send_frame_size=7976, num_recv_frames=256, num_send_frames=256";
+    this->device_args = device_args;
+    this->subdev = "A:A";
+    this->ref = "internal";
+    this->antenna_mode = "TX/RX";
+    
+    //this->rf_buff = rf_buff;
 
     this->sample_rate = sample_rate;
     this->center_frequency = center_frequency;
     this->gain = gain;
     this->bandwidth = bandwidth;
-    this->device_args = device_args;
-    this->subdev = subdev;
-    this->antenna_mode = antenna_mode;
-    this->ref = ref;
 
-    uhd::usrp::multi_usrp::sptr usrp = uhd::usrp::multi_usrp::make(device_args);
-    this->usrp = usrp;
+    this->usrp = uhd::usrp::multi_usrp::make(device_args);//device_args
     this->usrp->set_clock_source(this->ref);
     this->usrp->set_rx_subdev_spec(this->subdev );
     this->usrp->set_rx_rate(this->sample_rate);
