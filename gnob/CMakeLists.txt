@@ -16,6 +16,7 @@ add_executable(gnob
 include_directories(
         ${Boost_INCLUDE_DIRS}
         ${UHD_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIRS})
+#link_directories(${Boost_LIBRARY_DIRS})
+
 
 target_link_libraries(gnob ${UHD_LIBRARIES} ${Boost_LIBRARIES})
