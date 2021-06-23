@@ -30,6 +30,7 @@ public:
     
     uhd::usrp::multi_usrp::sptr usrp;
     std::vector<std::complex<float>> start_receiving(int total_num_samps) const;
+    void start_transmitting(std::vector<std::complex<float>>, uhd::time_spec_t time_to_send);
 
 
 };

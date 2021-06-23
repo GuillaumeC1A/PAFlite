@@ -86,7 +86,7 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
 
     // setup streaming
     uhd::stream_cmd_t stream_cmd(uhd::stream_cmd_t::STREAM_MODE_NUM_SAMPS_AND_DONE);
-    stream_cmd.num_samps  = total_num_samps;
+    stream_cmd.num_samps = total_num_samps;
     stream_cmd.stream_now = true;
     rx_stream->issue_stream_cmd(stream_cmd);
 
@@ -97,7 +97,7 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
 
 
     while (num_acc_samps < total_num_samps) {
-        size_t num_rx_samps = rx_stream->recv(&buff.front(), buff.size(), md, 1 );
+        size_t num_rx_samps = rx_stream->recv(&buff.front(), buff.size(), md, 1);
 
         // handle the error codes
         switch (md.error_code) {
@@ -120,8 +120,6 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
         }
 
 
-
-
         num_acc_samps += num_rx_samps;
     }
     done_loop:
@@ -130,4 +128,14 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
     std::cout << std::endl << "Done!" << std::endl << std::endl;
 
     return buff;
+}
+
+void rf::start_transmitting(std::vector<std::complex<float>>, uhd::time_spec_t time_to_send){
+    uhd::tx_metadata_t md;
+    md.start_of_burst = true;
+    md.end_of_burst = false;
+    md.has_time_spec = true;
+    md.time_spec = time_to_send;
+//send a single packet
+    size_t num_tx_samps = tx_streamer->send(buffs, samps_to_send, md);
 }
