@@ -75,3 +75,56 @@ rf::rf(double sample_rate, double center_frequency,
     this->usrp->set_tx_bandwidth(this->bandwidth);
     this->usrp->set_tx_antenna(this->antenna_mode);
 }
+
+std::vector<std::complex<float>> rf::start_receiving(int total_num_samps){
+    // create a receive streamer
+    uhd::stream_args_t stream_args("fc32"); // complex floats
+    uhd::rx_streamer::sptr rx_stream = usrp->get_rx_stream(stream_args);
+
+    // setup streaming
+    uhd::stream_cmd_t stream_cmd(uhd::stream_cmd_t::STREAM_MODE_NUM_SAMPS_AND_DONE);
+    stream_cmd.num_samps  = total_num_samps;
+    stream_cmd.stream_now = true;
+    rx_stream->issue_stream_cmd(stream_cmd);
+
+    // loop until total number of samples reached
+    size_t num_acc_samps = 0; // number of accumulated samples
+    uhd::rx_metadata_t md;
+    std::vector<std::complex<float>> buff(rx_stream->get_max_num_samps());
+
+
+    while (num_acc_samps < total_num_samps) {
+        size_t num_rx_samps = rx_stream->recv(&buff.front(), buff.size(), md);
+
+        // handle the error codes
+        switch (md.error_code) {
+            case uhd::rx_metadata_t::ERROR_CODE_NONE:
+                break;
+
+            case uhd::rx_metadata_t::ERROR_CODE_TIMEOUT:
+                if (num_acc_samps == 0)
+                    continue;
+                std::cout << boost::format("Got timeout before all samples received, "
+                                           "possible packet loss, exiting loop...")
+                          << std::endl;
+                goto done_loop;
+
+            default:
+                std::cout << boost::format("Got error code 0x%x, exiting loop...")
+                             % md.error_code
+                          << std::endl;
+                goto done_loop;
+        }
+
+
+
+
+        num_acc_samps += num_rx_samps;
+    }
+    done_loop:
+
+    // finished
+    std::cout << std::endl << "Done!" << std::endl << std::endl;
+
+    return buff;
+}

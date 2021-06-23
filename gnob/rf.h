@@ -29,6 +29,7 @@ public:
                                 double bandwidth);
     
     uhd::usrp::multi_usrp::sptr usrp;
+    std::vector<std::complex<float>> start_receiving(int total_num_samps);
 
 
 };
