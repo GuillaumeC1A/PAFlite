@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 find_package(UHD 3.0.0 REQUIRED)
+find_package(Boost REQUIRED)
 add_executable(gnob
         main.cpp
         rf.cpp
