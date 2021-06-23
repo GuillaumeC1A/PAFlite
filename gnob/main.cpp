@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 
     double freq(1000e6);
     double rate(30.72e6);
-    double gain(2);
+    double gain(10);
     double bw(3.84e6);
     int total_num_samps = 1000;
     uhd::time_spec_t start_time(double(1));

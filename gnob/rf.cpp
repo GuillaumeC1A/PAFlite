@@ -131,6 +131,12 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps, uhd::t
     return buff;
 }
 
+static bool stop_signal_called = false;
+void sig_int_handler(int)
+{
+    stop_signal_called = true;
+}
+
 void rf::start_transmitting(std::vector<std::vector<std::complex<float>>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
     uhd::tx_metadata_t md;
     md.start_of_burst = true;
@@ -140,5 +146,7 @@ void rf::start_transmitting(std::vector<std::vector<std::complex<float>>> buffs,
     uhd::stream_args_t stream_args("fc32"); // complex floats
     uhd::tx_streamer::sptr tx_stream = usrp->get_tx_stream(stream_args);
 //send a single packet
-    tx_stream->send(buffs, samps_to_send, md);
+    while (not stop_signal_called) {
+        tx_stream->send(&buffs.front(), samps_to_send, md);
+    }
 }
