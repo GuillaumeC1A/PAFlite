@@ -39,7 +39,9 @@ int main(int argc, char *argv[]) {
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     vector<complex<float>> buff = device.start_receiving(1000);
 
-
+    for(int i = 0; i<buff.size(); i++){
+        cout << buff[i];
+    }
     
     
 
