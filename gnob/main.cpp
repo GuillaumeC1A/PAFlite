@@ -39,9 +39,13 @@ int main(int argc, char *argv[]) {
     usrp->set_time_next_pps(uhd::time_spec_t(0.0));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    cout << usrp->get_time_now().get_full_secs()
+         <<endl;
 
 
-    boost::thread recv_thread([total_num_samps, device=device] {vector<complex<float>> buff = device.start_receiving(total_num_samps);
+
+    boost::thread recv_thread([total_num_samps, device=device] {
+        vector<complex<float>> buff = device.start_receiving(total_num_samps);
         for(int i = 0; i<buff.size(); i++){
             cout << buff[i];
         }

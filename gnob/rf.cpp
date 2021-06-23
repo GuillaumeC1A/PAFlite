@@ -97,7 +97,7 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
 
 
     while (num_acc_samps < total_num_samps) {
-        size_t num_rx_samps = rx_stream->recv(&buff.front(), buff.size(), md, 1);
+        size_t num_rx_samps = rx_stream->recv(&buff.front(), buff.size(), md, 1 );
 
         // handle the error codes
         switch (md.error_code) {
