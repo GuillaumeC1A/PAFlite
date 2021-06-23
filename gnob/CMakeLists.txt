@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 find_package(UHD 3.0.0 REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED COMPONENTS thread filesystem)
 add_executable(gnob
         main.cpp
         rf.cpp
@@ -22,4 +22,4 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 
 target_link_libraries(gnob ${UHD_LIBRARIES} ${Boost_LIBRARIES} ${PROJECT_SOURCE_DIR}/lib/libboost_filesystem.so
-        ${PROJECT_SOURCE_DIR}/lib/libboost_system.so)
+        ${PROJECT_SOURCE_DIR}/lib/libboost_system.so )

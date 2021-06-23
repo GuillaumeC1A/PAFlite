@@ -11,6 +11,7 @@
 #include <uhd/types/stream_cmd.hpp>
 #include <uhd/utils/safe_main.hpp>
 #include <uhd/utils/thread.hpp>
+#include <boost/thread.hpp>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
 #include <chrono>
@@ -36,17 +37,18 @@ int main(int argc, char *argv[]) {
     uhd::usrp::multi_usrp::sptr usrp = device.usrp;
 
     usrp->set_time_next_pps(uhd::time_spec_t(0.0));
-    uhd::stream_args_t stream_args("fc32"); // complex floats
-    uhd::rx_streamer::sptr rx_stream = usrp->get_rx_stream(stream_args);
+
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 
+    boost::thread recv_thread([total_num_samps, device=device] {vector<complex<float>> buff = device.start_receiving(total_num_samps);
+        for(int i = 0; i<buff.size(); i++){
+            cout << buff[i];
+        }
+    });
+    recv_thread.join();
 
-    vector<complex<float>> buff = device.start_receiving(1000,rx_stream);
 
-    for(int i = 0; i<buff.size(); i++){
-        cout << buff[i];
-    }
     
     
 
