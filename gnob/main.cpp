@@ -36,8 +36,13 @@ int main(int argc, char *argv[]) {
     uhd::usrp::multi_usrp::sptr usrp = device.usrp;
 
     usrp->set_time_next_pps(uhd::time_spec_t(0.0));
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-    vector<complex<float>> buff = device.start_receiving(1000);
+    uhd::stream_args_t stream_args("fc32"); // complex floats
+    uhd::rx_streamer::sptr rx_stream = usrp->get_rx_stream(stream_args);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+
+
+    vector<complex<float>> buff = device.start_receiving(1000,rx_stream);
 
     for(int i = 0; i<buff.size(); i++){
         cout << buff[i];

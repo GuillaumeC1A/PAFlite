@@ -77,10 +77,10 @@ rf::rf(double sample_rate, double center_frequency,
 
 }
 
-std::vector<std::complex<float>> rf::start_receiving(int total_num_samps){
+std::vector<std::complex<float>> rf::start_receiving(int total_num_samps , uhd::rx_streamer::sptr rx_stream){
     // create a receive streamer
-    uhd::stream_args_t stream_args("fc32"); // complex floats
-    uhd::rx_streamer::sptr rx_stream = usrp->get_rx_stream(stream_args);
+
+
 
     // setup streaming
     uhd::stream_cmd_t stream_cmd(uhd::stream_cmd_t::STREAM_MODE_NUM_SAMPS_AND_DONE);
