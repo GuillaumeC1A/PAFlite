@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     usrp->set_time_next_pps(uhd::time_spec_t(0.0));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    cout << usrp->get_time_now().get_full_secs()
+    cout << usrp->get_time_now().to_ticks(rate)
          <<endl;
 
 
