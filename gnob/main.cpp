@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
     double gain(2);
     double bw(3.84e6);
     int total_num_samps = 1000;
+    uhd::time_spec_t start_time(double(1));
 
 
     rf device(rate, freq, gain, bw);
@@ -44,13 +45,22 @@ int main(int argc, char *argv[]) {
 
 
 
-    boost::thread recv_thread([total_num_samps, device=device] {
-        vector<complex<float>> buff = device.start_receiving(total_num_samps);
+    boost::thread recv_thread([total_num_samps, device=device, start_time] {
+        vector<complex<float>> buff = device.start_receiving(total_num_samps, start_time);
         for(int i = 0; i<buff.size(); i++){
             cout << buff[i];
         }
     });
+
+    vector<vector<complex<float>>> table(280, vector<complex<float>>(1024 , {0,0}));
+
+    boost::thread transmit_thread([table, total_num_samps, device=device, start_time] {
+        device.start_transmitting(table,total_num_samps, start_time);
+
+    });
+
     recv_thread.join();
+    transmit_thread.join();
 
 
     

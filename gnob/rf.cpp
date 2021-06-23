@@ -77,7 +77,7 @@ rf::rf(double sample_rate, double center_frequency,
 
 }
 
-std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const {
+std::vector<std::complex<float>> rf::start_receiving(int total_num_samps, uhd::time_spec_t time_to_recv) const {
     // create a receive streamer
 
     uhd::stream_args_t stream_args("fc32"); // complex floats
@@ -87,7 +87,8 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
     // setup streaming
     uhd::stream_cmd_t stream_cmd(uhd::stream_cmd_t::STREAM_MODE_NUM_SAMPS_AND_DONE);
     stream_cmd.num_samps = total_num_samps;
-    stream_cmd.stream_now = true;
+    stream_cmd.stream_now = false;
+    stream_cmd.time_spec = time_to_recv;
     rx_stream->issue_stream_cmd(stream_cmd);
 
     // loop until total number of samples reached
@@ -130,12 +131,14 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps ) const
     return buff;
 }
 
-void rf::start_transmitting(std::vector<std::complex<float>>, uhd::time_spec_t time_to_send){
+void rf::start_transmitting(std::vector<std::vector<std::complex<float>>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
     uhd::tx_metadata_t md;
     md.start_of_burst = true;
     md.end_of_burst = false;
     md.has_time_spec = true;
     md.time_spec = time_to_send;
+    uhd::stream_args_t stream_args("fc32"); // complex floats
+    uhd::tx_streamer::sptr tx_stream = usrp->get_tx_stream(stream_args);
 //send a single packet
-    size_t num_tx_samps = tx_streamer->send(buffs, samps_to_send, md);
+    tx_stream->send(buffs, samps_to_send, md);
 }

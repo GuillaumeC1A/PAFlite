@@ -29,10 +29,9 @@ public:
                                 double bandwidth);
     
     uhd::usrp::multi_usrp::sptr usrp;
-    std::vector<std::complex<float>> start_receiving(int total_num_samps) const;
-    void start_transmitting(std::vector<std::complex<float>>, uhd::time_spec_t time_to_send);
+    std::vector<std::complex<float>> start_receiving(int total_num_samps ,uhd::time_spec_t time_to_recv) const;
 
-
+    void start_transmitting(std::vector<std::vector<std::complex<float>>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const;
 };
 
 
