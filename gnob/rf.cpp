@@ -74,6 +74,7 @@ rf::rf(double sample_rate, double center_frequency,
     this->usrp->set_tx_gain(this->gain);
     this->usrp->set_tx_bandwidth(this->bandwidth);
     this->usrp->set_tx_antenna(this->antenna_mode);
+
 }
 
 std::vector<std::complex<float>> rf::start_receiving(int total_num_samps){
