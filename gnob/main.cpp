@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     double rate(30.72e6);
     double gain(10);
     double bw(3.84e6);
-    int total_num_samps = 1000;
+    int total_num_samps = 256*5;
     uhd::time_spec_t start_time(double(1));
 
 
