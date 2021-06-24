@@ -137,7 +137,7 @@ void sig_int_handler(int)
     stop_signal_called = true;
 }
 
-void rf::start_transmitting(std::vector<std::vector<std::complex<float>>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
+void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
     uhd::tx_metadata_t md;
     md.start_of_burst = true;
     md.end_of_burst = false;
