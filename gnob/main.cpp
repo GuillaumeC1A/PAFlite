@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
     uhd::time_spec_t start_time(double(10)); // We'll start by imposing a start time for
                                                 // the emission and receiving of 4 seconds.
 
-
     rf device(rate, freq, gain, bw); //initiate the rf device
     uhd::usrp::multi_usrp::sptr usrp = device.usrp; //get its usrp
 
@@ -64,15 +63,7 @@ int main(int argc, char *argv[]) {
 
     });
 
-
-
-
     recv_thread.join();
 
     transmit_thread.join();
-
-
-    
-    
-
 }

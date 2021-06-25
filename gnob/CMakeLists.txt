@@ -21,5 +21,4 @@ include_directories(
 link_directories(${Boost_LIBRARY_DIRS})
 
 
-target_link_libraries(gnob ${UHD_LIBRARIES} ${Boost_LIBRARIES} ${PROJECT_SOURCE_DIR}/lib/libboost_filesystem.so
-        ${PROJECT_SOURCE_DIR}/lib/libboost_system.so )
+target_link_libraries(gnob ${UHD_LIBRARIES} ${Boost_LIBRARIES} ${PROJECT_SOURCE_DIR})

@@ -173,7 +173,6 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
         cout << endl<< "samples sent is "<<samples_sent<<endl;
 
-
     }
     if(samples_sent==0){
         std::cout << "Sample sent reached 0 :/"
