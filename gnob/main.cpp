@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
     double gain(10);
     double bw(3.84e6);
     int total_num_samps = 256*5;
-    uhd::time_spec_t start_time(double(1));
+    uhd::time_spec_t start_time(double(3));
 
 
     rf device(rate, freq, gain, bw);
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 
     usrp->set_time_next_pps(uhd::time_spec_t(0.0));
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
     cout << usrp->get_time_now().to_ticks(rate)
          <<endl;
 
@@ -58,6 +58,8 @@ int main(int argc, char *argv[]) {
         device.start_transmitting(table,total_num_samps, start_time);
 
     });
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     recv_thread.join();
 
