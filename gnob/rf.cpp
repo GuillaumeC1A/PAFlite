@@ -167,12 +167,11 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
 
 //send a single packet
     while (not stop_signal_called) {
-        for(int i=0; i<buffs.size(); i++){
-            cout << buffs[i] << "    " ;
-        }
+
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
         if (samples_sent =! tmp) {
             cout << endl << "samples sent is " << samples_sent << endl;
+            cout.flush();
         }
         tmp = samples_sent;
         md.has_time_spec = false;

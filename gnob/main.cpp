@@ -47,12 +47,14 @@ int main(int argc, char *argv[]) {
          << usrp->get_time_now().get_full_secs()
          << " secs and " << usrp->get_time_now().get_tick_count(rate) << " ticks"
          << endl<<endl;
+    cout.flush();
 
     boost::thread recv_thread([total_num_samps, device=device, start_time] {
         vector<complex<float>> buff = device.start_receiving(total_num_samps, start_time);
 
         for(int i = 0; i<buff.size(); i++){
-            cout << buff[i]<< "   ";
+            cout << buff[i]<< "  ";
+            cout.flush();
         }
     });
 
