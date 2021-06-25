@@ -162,7 +162,7 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
     uhd::tx_streamer::sptr tx_stream = usrp->get_tx_stream(stream_args);
 
 
-    md.start_of_burst = false; // Then it is not the begining of the transmission
+
 
 
 //send a single packet
@@ -175,6 +175,7 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
         }
         tmp = samples_sent;
         md.has_time_spec = false;
+        md.start_of_burst = false; // Then it is not the begining of the transmission
 
     }
     if(samples_sent==0){
