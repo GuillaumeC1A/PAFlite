@@ -127,14 +127,14 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps, uhd::t
     done_loop:
 
     // finished
-    std::cout << std::endl << "Done emitting! Start Receiving time was : " << std::endl << std::endl;
+    std::cout << std::endl << "Done Receiving! Start Receiving time was : " << std::endl << std::endl;
     std::cout << md.time_spec.get_tick_count(sample_rate)
               <<"ticks  "
               << md.time_spec.get_full_secs()
               << " full secs  "
               << md.time_spec.get_frac_secs()
               << " frac secs for the internal clock."
-              << std::endl;
+              << std::endl<<endl;
     return buff;
 }
 
