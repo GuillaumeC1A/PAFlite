@@ -160,7 +160,7 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
 
 //send a single packet
     while (not stop_signal_called and samples_sent != 0) {
-        samples_sent = tx_stream->send(&buffs.front(), samps_to_send, md);
+        samples_sent = tx_stream->send(buffs, buffs.size(), md);
 
     }
     if(samples_sent==0){
