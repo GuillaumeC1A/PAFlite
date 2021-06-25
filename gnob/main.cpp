@@ -40,7 +40,8 @@ int main(int argc, char *argv[]) {
     usrp->set_time_next_pps(uhd::time_spec_t(0.0)); //Sets the usrp internal clock to 0
 
     cout << endl << "Program will sleep for 2 secs";
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // Sleeping during 2 secs !!!!
+    cout.flush();
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // Sleeping during 2 secs !!!!
 
     cout <<endl
          << "After the program slept for 2 seconds, the internal usrp clock is at "
