@@ -126,18 +126,18 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps, uhd::t
     done_loop:
 
     // finished
-    std::cout << std::endl << "Done! Start Receiving time was : " << std::endl << std::endl;
+    std::cout << std::endl << "Done emitting! Start Receiving time was : " << std::endl << std::endl;
     std::cout << md.time_spec.get_tick_count(sample_rate)
               <<"ticks  "
               << md.time_spec.get_full_secs()
               << " full secs  "
               << md.time_spec.get_frac_secs()
-              << "frac secs  "
+              << " frac secs for the internal clock."
               << std::endl;
     return buff;
 }
 
-size_t samples_sent = -1;
+size_t samples_sent = 0;
 static bool stop_signal_called = false;
 
 void sig_int_handler(int)
@@ -159,7 +159,10 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
     uhd::stream_args_t stream_args("fc32"); // complex floats
     uhd::tx_streamer::sptr tx_stream = usrp->get_tx_stream(stream_args);
 
-    samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md); // Send one time with the time specification (delay)
+    while(samples_sent==0)  { //While sending didn't start (because t < start_time)
+        samples_sent = tx_stream->send(&buffs.front(), buffs.size(),
+                                       md); // Send one time with the time specification (delay)
+    }
     md.start_of_burst = false; // Then it is not the begining of the transmission
     md.has_time_spec = false; // Then we do not care about the time : we keep on transmitting
 

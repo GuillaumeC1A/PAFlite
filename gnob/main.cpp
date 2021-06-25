@@ -24,24 +24,29 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-
-    cout << "\nHEllo World !\n";
-
+    //######### Initializing default values ########//
     double freq(1000e6);
     double rate(30.72e6);
     double gain(10);
     double bw(3.84e6);
     int total_num_samps = 256*5;
-    uhd::time_spec_t start_time(double(4));
+    uhd::time_spec_t start_time(double(4)); // We'll start by imposing a start time for
+                                                // the emission and receiving of 4 seconds.
 
 
-    rf device(rate, freq, gain, bw);
-    uhd::usrp::multi_usrp::sptr usrp = device.usrp;
+    rf device(rate, freq, gain, bw); //initiate the rf device
+    uhd::usrp::multi_usrp::sptr usrp = device.usrp; //get its usrp
 
-    usrp->set_time_next_pps(uhd::time_spec_t(0.0));
+    usrp->set_time_next_pps(uhd::time_spec_t(0.0)); //Sets the usrp internal clock to 0
 
+    cout << endl << "Program will sleep for 2 secs";
     sleep(2); // Sleeping during 2 secs !!!!
 
+    cout <<endl
+         << "After the program slept for 2 seconds, the internal usrp clock is at "
+         << usrp->get_time_now().get_full_secs()
+         << " secs"
+         << endl;
 
     boost::thread recv_thread([total_num_samps, device=device, start_time] {
         vector<complex<float>> buff = device.start_receiving(total_num_samps, start_time);
@@ -58,7 +63,7 @@ int main(int argc, char *argv[]) {
 
     });
 
-    //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
 
 
     recv_thread.join();
