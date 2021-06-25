@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
         vector<complex<float>> buff = device.start_receiving(total_num_samps, start_time);
 
         for(int i = 0; i<buff.size(); i++){
-            cout << buff[i]< "   ";
+            cout << buff[i]<< "   ";
         }
     });
 

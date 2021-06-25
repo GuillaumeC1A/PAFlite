@@ -144,13 +144,14 @@ static bool stop_signal_called = false;
 void sig_int_handler(int)
 {
     stop_signal_called = true;
-    std::cout << nld <<"number of samples that were sent in the last packet : "
+    std::cout << endl <<"number of samples that were sent in the last packet : "
               << samples_sent
               << std::endl;
 }
 
 void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
     size_t samples_sent = 0;
+    size_t tmp = -1;
     std::signal(2, sig_int_handler);
     uhd::tx_metadata_t md;
     md.start_of_burst = true;
@@ -170,7 +171,10 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
             cout << buffs[i] << "    " ;
         }
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
-        cout << endl<< "samples sent is "<<samples_sent<<endl;
+        if (samples_sent =! tmp) {
+            cout << endl << "samples sent is " << samples_sent << endl;
+        }
+        tmp = samples_sent;
         md.has_time_spec = false;
 
     }
