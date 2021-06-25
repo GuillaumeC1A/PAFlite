@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     double gain(10);
     double bw(3.84e6);
     int total_num_samps = 256*5;
-    uhd::time_spec_t start_time(double(4)); // We'll start by imposing a start time for
+    uhd::time_spec_t start_time(double(10)); // We'll start by imposing a start time for
                                                 // the emission and receiving of 4 seconds.
 
 
@@ -39,14 +39,14 @@ int main(int argc, char *argv[]) {
 
     usrp->set_time_next_pps(uhd::time_spec_t(0.0)); //Sets the usrp internal clock to 0
 
-    cout << endl << "Program will sleep for 2 secs";
+    cout << endl << "Program will sleep for 4 secs";
     cout.flush();
-    std::this_thread::sleep_for(std::chrono::seconds(2)); // Sleeping during 2 secs !!!!
+    std::this_thread::sleep_for(std::chrono::seconds(4)); // Sleeping during 2 secs !!!!
 
     cout <<endl
-         << "After the program slept for 2 seconds, the internal usrp clock is at "
+         << "After the program slept for 4 seconds, the internal usrp clock is at "
          << usrp->get_time_now().get_full_secs()
-         << " secs"
+         << " secs and " << usrp->get_time_now().get_tick_count(rate) << " ticks"
          << endl;
 
     boost::thread recv_thread([total_num_samps, device=device, start_time] {
