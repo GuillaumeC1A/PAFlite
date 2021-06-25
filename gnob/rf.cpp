@@ -170,12 +170,15 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
 
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
         if (samples_sent =! tmp) {
-            cout << endl << "samples sent is " << samples_sent << endl;
+            cout << endl << "num of samples sent is " << samples_sent << endl;
             cout.flush();
         }
         tmp = samples_sent;
-        md.has_time_spec = false;
-        md.start_of_burst = false; // Then it is not the begining of the transmission
+
+        if(usrp->get_time_now() > time_to_send) {
+            md.has_time_spec = false;
+            md.start_of_burst = false; // Then it is not the beginning of the transmission
+        }
 
     }
     if(samples_sent==0){

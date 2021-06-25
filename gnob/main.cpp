@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
             cout << buff[i]<< "  ";
             cout.flush();
         }
+        cout<<endl;
     });
 
     vector<complex<float>> table(1280, complex<float>(10,10)); //1280
