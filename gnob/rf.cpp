@@ -147,6 +147,9 @@ void sig_int_handler(int)
     std::cout << endl <<"number of samples that were sent in the last packet : "
               << samples_sent
               << std::endl;
+    std::signal(2, SIG_DFL);
+    kill(getpid(), 2);
+
 }
 
 void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
