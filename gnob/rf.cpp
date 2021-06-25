@@ -144,7 +144,7 @@ static bool stop_signal_called = false;
 void sig_int_handler(int)
 {
     stop_signal_called = true;
-    std::cout << "number of samples that were sent in the last packet : "
+    std::cout << nld <<"number of samples that were sent in the last packet : "
               << samples_sent
               << std::endl;
 }
@@ -166,6 +166,9 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
 
 //send a single packet
     while (not stop_signal_called) {
+        for(int i=0; i<buffs.size(); i++){
+            cout << buffs[i] << "    " ;
+        }
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
         cout << endl<< "samples sent is "<<samples_sent<<endl;
         md.has_time_spec = false;

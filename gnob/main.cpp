@@ -46,17 +46,17 @@ int main(int argc, char *argv[]) {
          << "After the program slept for 4 seconds, the internal usrp clock is at "
          << usrp->get_time_now().get_full_secs()
          << " secs and " << usrp->get_time_now().get_tick_count(rate) << " ticks"
-         << endl;
+         << endl<<endl;
 
     boost::thread recv_thread([total_num_samps, device=device, start_time] {
         vector<complex<float>> buff = device.start_receiving(total_num_samps, start_time);
 
         for(int i = 0; i<buff.size(); i++){
-            cout << buff[i];
+            cout << buff[i]< "   ";
         }
     });
 
-    vector<complex<float>> table(1280, complex<float>(10,10));
+    vector<complex<float>> table(2, complex<float>(10,10)); //1280
 
     boost::thread transmit_thread([table, total_num_samps, device=device, start_time] {
         device.start_transmitting(table,total_num_samps, start_time);
