@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
         }
     });
 
-    vector<complex<float>> table(280, complex<float>(10,10));
+    vector<complex<float>> table(1280, complex<float>(10,10));
 
     boost::thread transmit_thread([table, total_num_samps, device=device, start_time] {
         device.start_transmitting(table,total_num_samps, start_time);
