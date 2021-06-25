@@ -128,6 +128,11 @@ std::vector<std::complex<float>> rf::start_receiving(int total_num_samps, uhd::t
     // finished
     std::cout << std::endl << "Done! Start Receiving time was : " << std::endl << std::endl;
     std::cout << md.time_spec.get_tick_count(sample_rate)
+              <<"ticks"
+              << md.time_spec.get_full_secs()
+              << " full secs"
+              << md.time_spec.get_frac_secs()
+              << "frac secs"
               << std::endl;
     return buff;
 }
@@ -151,9 +156,9 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
 //send a single packet
     while (not stop_signal_called) {
         samples_sent = tx_stream->send(&buffs.front(), samps_to_send, md);
-
+        std::cout << "number of samples that were sent in the last packet : "
+                  << samples_sent
+                  << std::endl;
     }
-    std::cout << "number of samples that were sent in the last packet : "
-              << samples_sent
-              << std::endl;
+
 }

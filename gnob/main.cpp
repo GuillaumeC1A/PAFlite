@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
 
     boost::thread recv_thread([total_num_samps, device=device, start_time] {
         vector<complex<float>> buff = device.start_receiving(total_num_samps, start_time);
+
         for(int i = 0; i<buff.size(); i++){
             cout << buff[i];
         }
