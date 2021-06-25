@@ -33,6 +33,7 @@
 #include <string>
 #include <csignal>
 
+using namespace std;
 
 rf::rf(double sample_rate, double center_frequency,
                                 double gain,
@@ -149,7 +150,7 @@ void sig_int_handler(int)
 }
 
 void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to_send, uhd::time_spec_t time_to_send) const {
-
+    size_t samples_sent = 0;
     std::signal(2, sig_int_handler);
     uhd::tx_metadata_t md;
     md.start_of_burst = true;
@@ -162,6 +163,7 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
     while(samples_sent==0)  { //While sending didn't start (because t < start_time)
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(),
                                        md); // Send one time with the time specification (delay)
+                                       cout << endl<< "samples sent is "<<samples_sent<<endl;
     }
     md.start_of_burst = false; // Then it is not the begining of the transmission
     md.has_time_spec = false; // Then we do not care about the time : we keep on transmitting
@@ -169,6 +171,7 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
 //send a single packet
     while (not stop_signal_called and samples_sent != 0) {
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
+        cout << endl<< "samples sent is "<<samples_sent<<endl;
 
 
     }
