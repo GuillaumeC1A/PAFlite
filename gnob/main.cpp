@@ -19,6 +19,7 @@
 #include <iostream>
 #include <thread>
 #include "rf.h"
+#include <unistd.h>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ int main(int argc, char *argv[]) {
     double gain(10);
     double bw(3.84e6);
     int total_num_samps = 256*5;
-    uhd::time_spec_t start_time(double(3));
+    uhd::time_spec_t start_time(double(4));
 
 
     rf device(rate, freq, gain, bw);
@@ -39,10 +40,7 @@ int main(int argc, char *argv[]) {
 
     usrp->set_time_next_pps(uhd::time_spec_t(0.0));
 
-
-    cout << usrp->get_time_now().to_ticks(rate)
-         <<endl;
-
+    sleep(2); // Sleeping during 2 secs !!!!
 
 
     boost::thread recv_thread([total_num_samps, device=device, start_time] {
@@ -60,7 +58,8 @@ int main(int argc, char *argv[]) {
 
     });
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
 
     recv_thread.join();
 
