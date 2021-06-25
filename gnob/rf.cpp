@@ -160,18 +160,15 @@ void rf::start_transmitting(std::vector<std::complex<float>> buffs, int samps_to
     uhd::stream_args_t stream_args("fc32"); // complex floats
     uhd::tx_streamer::sptr tx_stream = usrp->get_tx_stream(stream_args);
 
-    while(samples_sent==0)  { //While sending didn't start (because t < start_time)
-        samples_sent = tx_stream->send(&buffs.front(), buffs.size(),
-                                       md); // Send one time with the time specification (delay)
-                                       cout << endl<< "samples sent is "<<samples_sent<<endl;
-    }
+
     md.start_of_burst = false; // Then it is not the begining of the transmission
-    md.has_time_spec = false; // Then we do not care about the time : we keep on transmitting
+
 
 //send a single packet
-    while (not stop_signal_called and samples_sent != 0) {
+    while (not stop_signal_called) {
         samples_sent = tx_stream->send(&buffs.front(), buffs.size(), md);
         cout << endl<< "samples sent is "<<samples_sent<<endl;
+        md.has_time_spec = false;
 
     }
     if(samples_sent==0){
