@@ -67,7 +67,7 @@ rf::rf(double sample_rate, double center_frequency,
     this->usrp->set_rx_freq(tune_request);
     this->usrp->set_rx_gain(this->gain);
     this->usrp->set_rx_bandwidth(this->bandwidth);
-    this->usrp->set_rx_antenna(this->antenna_mode);
+    this->usrp->set_rx_antenna("RX2");
 
     this->usrp->set_tx_subdev_spec(this->subdev );
     this->usrp->set_tx_rate(this->sample_rate);
